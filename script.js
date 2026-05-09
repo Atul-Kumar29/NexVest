@@ -1,13 +1,140 @@
-/* ── Config ────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   PortfolioAI — GSAP Animation Engine + Logic
+   ═══════════════════════════════════════════════════════════ */
 const API = 'http://127.0.0.1:8000';
 let barChart = null;
 let doughnutChart = null;
 
-/* ── Initial Animations ────────────────────────────────── */
-gsap.to(".gsap-hero", { opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power3.out" });
-gsap.to(".gsap-fade", { opacity: 1, y: 0, duration: 1, stagger: 0.1, delay: 0.5, ease: "power2.out" });
+/* ── Number formatting ─────────────────────────────────── */
+function fmtRupee(v) {
+  return '₹' + Math.round(v).toLocaleString('en-IN');
+}
 
-/* ── Investment rows ────────────────────────────────────── */
+
+
+/* ═══════════════════════════════════════════════════════════
+   Hero Entrance Animation
+   ═══════════════════════════════════════════════════════════ */
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+const heroTl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+
+heroTl
+  .to('.hero-title .word', {
+    opacity: 1,
+    y: 0,
+    duration: 1.2,
+    stagger: 0.15,
+  })
+  .to('#hero-line', {
+    width: '120px',
+    duration: 0.8,
+  }, '-=0.6')
+  .to('#hero-subtitle', {
+    opacity: 1,
+    y: 0,
+    duration: 0.8,
+  }, '-=0.4')
+  .to('.text-reveal', {
+    opacity: 1,
+    y: 0,
+    duration: 0.8,
+  }, '-=0.3');
+
+/* ═══════════════════════════════════════════════════════════
+   Scroll-Triggered Section Reveals
+   ═══════════════════════════════════════════════════════════ */
+gsap.utils.toArray('.section-reveal').forEach((el) => {
+  gsap.to(el, {
+    opacity: 1,
+    y: 0,
+    duration: 0.9,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: el,
+      start: 'top 88%',
+      toggleActions: 'play none none none',
+    },
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════
+   Heading Scrub — numbers slide in from left on scroll
+   ═══════════════════════════════════════════════════════════ */
+gsap.utils.toArray('.heading-num').forEach(num => {
+  gsap.from(num, {
+    x: -40,
+    opacity: 0,
+    scrollTrigger: {
+      trigger: num,
+      start: 'top 85%',
+      end: 'top 60%',
+      scrub: 1,
+    },
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════
+   Marquee — speed up on scroll
+   ═══════════════════════════════════════════════════════════ */
+const marqueeTrack = document.querySelector('.marquee-track');
+if (marqueeTrack) {
+  ScrollTrigger.create({
+    trigger: '.marquee-strip',
+    start: 'top bottom',
+    end: 'bottom top',
+    onUpdate: (self) => {
+      const speed = 20 - (self.progress * 14); // 20s → 6s
+      marqueeTrack.style.animationDuration = speed + 's';
+    },
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Hero Parallax — subtitle drifts up on scroll
+   ═══════════════════════════════════════════════════════════ */
+gsap.to('#hero-subtitle', {
+  y: -60,
+  opacity: 0.3,
+  scrollTrigger: {
+    trigger: '.hero-header',
+    start: 'top top',
+    end: 'bottom top',
+    scrub: true,
+  },
+});
+
+/* ═══════════════════════════════════════════════════════════
+   Hero Line — grows wider on scroll
+   ═══════════════════════════════════════════════════════════ */
+gsap.to('#hero-line', {
+  width: '100%',
+  scrollTrigger: {
+    trigger: '.hero-header',
+    start: 'center center',
+    end: 'bottom top',
+    scrub: 1,
+  },
+});
+
+/* ═══════════════════════════════════════════════════════════
+   Magnetic Button Effect
+   ═══════════════════════════════════════════════════════════ */
+document.querySelectorAll('.magnetic').forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: 'power2.out' });
+  });
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════
+   Investment Rows
+   ═══════════════════════════════════════════════════════════ */
 let rowId = 0;
 
 function addInvestmentRow(data = {}) {
@@ -17,8 +144,8 @@ function addInvestmentRow(data = {}) {
   tr.id = `row-${id}`;
   tr.innerHTML = `
     <td><input class="tufte-input" placeholder="Tech Stocks" value="${data.name || ''}" style="width:100%"/></td>
-    <td><input class="tufte-input" type="number" min="1" placeholder="30" value="${data.cost || ''}" style="width:60px" /></td>
-    <td><input class="tufte-input" type="number" min="1" placeholder="45" value="${data.expected_return || ''}" style="width:60px" /></td>
+    <td><input class="tufte-input" type="number" min="1" placeholder="2800" value="${data.cost || ''}" style="width:80px" /></td>
+    <td><input class="tufte-input" type="number" min="1" placeholder="3400" value="${data.expected_return || ''}" style="width:80px" /></td>
     <td>
       <select class="tufte-input" style="font-size:1.2rem;">
         <option value="low"    ${(data.risk_level||'medium')==='low'?'selected':''}>Low</option>
@@ -27,16 +154,16 @@ function addInvestmentRow(data = {}) {
       </select>
     </td>
     <td><input class="tufte-input" placeholder="Sector" value="${data.sector || ''}" style="width:100px" /></td>
-    <td><button class="btn-del" onclick="removeRow(${id})" title="Remove">×</button></td>
+    <td><button class="btn-del" onclick="removeRow(${id})" title="Remove">&times;</button></td>
   `;
   tbody.appendChild(tr);
-  gsap.from(tr, { opacity: 0, x: -10, duration: 0.3 });
+  gsap.from(tr, { opacity: 0, x: -20, duration: 0.4, ease: 'power2.out' });
 }
 
 function removeRow(id) {
   const row = document.getElementById(`row-${id}`);
   if (row) {
-    gsap.to(row, { opacity: 0, x: 10, duration: 0.3, onComplete: () => row.remove() });
+    gsap.to(row, { opacity: 0, x: 30, duration: 0.3, ease: 'power2.in', onComplete: () => row.remove() });
   }
 }
 
@@ -58,7 +185,9 @@ function getInvestments() {
   return investments;
 }
 
-/* ── Solve ──────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   Solve
+   ═══════════════════════════════════════════════════════════ */
 async function solve() {
   const investments = getInvestments();
   const budget = parseInt(document.getElementById('budget').value);
@@ -76,12 +205,10 @@ async function solve() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ budget, investments }),
     });
-
     if (!res.ok) {
       const err = await res.json();
       throw new Error(err.detail || 'API error');
     }
-
     const data = await res.json();
     renderResults(data);
   } catch (e) {
@@ -92,20 +219,35 @@ async function solve() {
   }
 }
 
-/* ── Render results ─────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   Render Results
+   ═══════════════════════════════════════════════════════════ */
 function renderResults(data) {
   const panel = document.getElementById('results-panel');
-  
+
   if (panel.style.display === 'none') {
     panel.style.display = 'block';
-    gsap.to(".gsap-res", { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power2.out" });
+    // Reveal all results sections with scroll triggers
+    gsap.utils.toArray('#results-panel .section-reveal').forEach((el, i) => {
+      gsap.to(el, {
+        opacity: 1, y: 0, duration: 0.8,
+        delay: i * 0.08,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 90%',
+          toggleActions: 'play none none none',
+        },
+      });
+    });
+    ScrollTrigger.refresh();
   }
 
-  // KPIs with GSAP count-up animation
-  gsapCounter('kpi-return', data.total_return, v => `₹${Math.round(v)}k`);
-  gsapCounter('kpi-invested', data.total_cost, v => `₹${Math.round(v)}k`);
+  // KPIs
+  gsapCounter('kpi-return', data.total_return, fmtRupee);
+  gsapCounter('kpi-invested', data.total_cost, fmtRupee);
   gsapCounter('kpi-roi', data.roi_percent, v => `${v.toFixed(1)}%`);
-  gsapCounter('kpi-remaining', data.remaining_budget, v => `₹${Math.round(v)}k`);
+  gsapCounter('kpi-remaining', data.remaining_budget, fmtRupee);
 
   // Tags
   const tagsEl = document.getElementById('selected-tags');
@@ -115,33 +257,94 @@ function renderResults(data) {
     tag.className = 'tag';
     tag.textContent = name;
     tagsEl.appendChild(tag);
-    gsap.from(tag, { opacity: 0, scale: 0.8, duration: 0.4, delay: 0.5 + i * 0.1 });
+    gsap.from(tag, { opacity: 0, scale: 0.5, y: 10, duration: 0.5, delay: 0.3 + i * 0.1, ease: 'back.out(1.7)' });
   });
 
   // Charts
   renderBarChart(data);
   renderDoughnutChart(data);
   renderDpTable(data);
+  renderEnhancedAllocation(data);
 
-  // Scroll to results
-  gsap.to(window, { scrollTo: { y: "#results-panel", offsetY: 20 }, duration: 1, ease: "power2.out" });
+  // Chart canvas scale-up reveal on scroll
+  document.querySelectorAll('#results-panel canvas').forEach(canvas => {
+    gsap.fromTo(canvas,
+      { scale: 0.8, opacity: 0 },
+      {
+        scale: 1, opacity: 1, duration: 1, ease: 'power2.out',
+        scrollTrigger: {
+          trigger: canvas,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+  });
+
+  // DP table row stagger on scroll
+  gsap.utils.toArray('#dp-table tbody tr').forEach((tr, i) => {
+    gsap.from(tr, {
+      opacity: 0, x: -25, duration: 0.4,
+      delay: i * 0.04,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: '#dp-table',
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+  });
+
+  ScrollTrigger.refresh();
+
+  // Update marquee with selected stock names
+  updateMarquee(data.selected_names);
+
+  // Show modal first
+  openModal(data);
+
+  // Scroll to results after brief delay
+  gsap.to(window, { scrollTo: { y: '#results-panel', offsetY: 20 }, duration: 1.2, delay: 0.3, ease: 'power2.inOut' });
 }
 
-/* ── GSAP Counter ───────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   Dynamic Marquee — shows selected stocks
+   ═══════════════════════════════════════════════════════════ */
+function updateMarquee(names) {
+  const track = document.querySelector('.marquee-track');
+  if (!track || !names.length) return;
+
+  // Build: "SELECTED — Name1 — Name2 — Name3 — ..." repeated twice for seamless loop
+  const items = names.map(n => n.toUpperCase());
+  const segment = ['SELECTED PORTFOLIO', '—', ...items.flatMap(n => [n, '—'])];
+  const doubled = [...segment, ...segment]; // repeat for seamless CSS loop
+
+  track.innerHTML = doubled.map(t => `<span>${t}</span>`).join('');
+
+  // Restart animation
+  track.style.animation = 'none';
+  track.offsetHeight; // force reflow
+  track.style.animation = '';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GSAP Counter
+   ═══════════════════════════════════════════════════════════ */
 function gsapCounter(id, target, format) {
   const obj = { val: 0 };
   const el = document.getElementById(id);
+  if (!el) return;
   gsap.to(obj, {
     val: target,
-    duration: 1.5,
-    ease: "power2.out",
-    onUpdate: () => {
-      el.textContent = format(obj.val);
-    }
+    duration: 2,
+    ease: 'power2.out',
+    onUpdate: () => { el.textContent = format(obj.val); }
   });
 }
 
-/* ── Bar chart ──────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   Charts
+   ═══════════════════════════════════════════════════════════ */
 function renderBarChart(data) {
   const ctx = document.getElementById('bar-chart').getContext('2d');
   if (barChart) barChart.destroy();
@@ -151,9 +354,8 @@ function renderBarChart(data) {
   const returns = data.investments.map(i => i.expected_return);
   const selectedSet = new Set(data.selected_names);
 
-  // Tufte inspired colors
   Chart.defaults.font.family = "'DM Mono', monospace";
-  Chart.defaults.color = "#333";
+  Chart.defaults.color = '#d4d4cc'; // Light text for dark background
 
   barChart = new Chart(ctx, {
     type: 'bar',
@@ -161,18 +363,18 @@ function renderBarChart(data) {
       labels,
       datasets: [
         {
-          label: 'Cost (₹k)',
+          label: 'Cost (₹)',
           data: costs,
           backgroundColor: data.investments.map(i =>
-            selectedSet.has(i.name) ? 'rgba(50,50,50,0.8)' : 'rgba(200,200,200,0.5)'),
-          borderColor: 'rgba(50,50,50,1)',
+            selectedSet.has(i.name) ? 'rgba(120,120,120,0.8)' : 'rgba(200,200,200,0.15)'),
+          borderColor: 'rgba(150,150,150,1)',
           borderWidth: 1,
         },
         {
-          label: 'Return (₹k)',
+          label: 'Return (₹)',
           data: returns,
           backgroundColor: data.investments.map(i =>
-            selectedSet.has(i.name) ? 'rgba(42, 126, 75, 0.8)' : 'rgba(42, 126, 75, 0.2)'),
+            selectedSet.has(i.name) ? 'rgba(42, 126, 75, 0.8)' : 'rgba(42, 126, 75, 0.3)'),
           borderColor: 'rgba(42, 126, 75, 1)',
           borderWidth: 1,
         },
@@ -180,14 +382,15 @@ function renderBarChart(data) {
     },
     options: {
       responsive: true,
-      plugins: {
-        legend: { labels: { font: { size: 12 } } },
-      },
+      plugins: { legend: { labels: { font: { size: 12 } } } },
+      scales: {
+        x: { grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+        y: { grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+      }
     },
   });
 }
 
-/* ── Doughnut chart ─────────────────────────────────────── */
 function renderDoughnutChart(data) {
   const ctx = document.getElementById('doughnut-chart').getContext('2d');
   if (doughnutChart) doughnutChart.destroy();
@@ -195,7 +398,6 @@ function renderDoughnutChart(data) {
   const selected = data.investments.filter(i => i.selected);
   if (!selected.length) return;
 
-  // Classic muted palette
   const colors = ['#2a7e4b','#555555','#b8860b','#4682b4','#cd5c5c','#8fbc8f','#dda0dd'];
 
   doughnutChart = new Chart(ctx, {
@@ -209,38 +411,42 @@ function renderDoughnutChart(data) {
         borderColor: '#fffff8'
       }],
     },
-    options: {
-      responsive: true,
-      cutout: '60%',
-      plugins: {
-        legend: { position: 'bottom' },
-      },
+    options: { 
+      responsive: true, 
+      cutout: '60%', 
+      plugins: { legend: { position: 'bottom' } },
+      elements: { arc: { borderColor: '#0d0d0d' } } // Match dark background
     },
   });
 }
 
-/* ── DP table ───────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   DP Table
+   ═══════════════════════════════════════════════════════════ */
 function renderDpTable(data) {
   const table = document.getElementById('dp-table');
   const dp = data.dp_table;
-  const maxCols = dp[0].length; // Dynamic length, no longer constrained to 13
+  const labels = data.dp_labels || [];
   const maxVal = data.total_return;
   table.innerHTML = '';
 
-  // Header row
+  if (!dp || !dp.length) return;
+
   const head = document.createElement('thead');
   const headTr = document.createElement('tr');
-  headTr.innerHTML = `<th>Item \\ W</th>` + Array.from({ length: maxCols - 1 }, (_, i) => `<th>${i}</th>`).join('');
+  headTr.innerHTML = `<th>Item \\ W</th>` + dp[0].map((_, i) => {
+    const label = labels[i] !== undefined ? labels[i] : i;
+    return `<th>${label}</th>`;
+  }).join('');
   head.appendChild(headTr);
   table.appendChild(head);
 
-  // Body
   const body = document.createElement('tbody');
   dp.forEach((row, i) => {
     const tr = document.createElement('tr');
-    const label = i === 0 ? '—' : (data.investments[i - 1]?.name || `Item ${i}`);
-    tr.innerHTML = `<th title="${label}">${label.length > 15 ? label.slice(0, 15) + '…' : label}</th>`;
-    for (let w = 0; w < maxCols - 1; w++) {
+    const name = i === 0 ? '—' : (data.investments[i - 1]?.name || `Item ${i}`);
+    tr.innerHTML = `<th title="${name}">${name.length > 15 ? name.slice(0, 15) + '…' : name}</th>`;
+    for (let w = 0; w < row.length; w++) {
       const td = document.createElement('td');
       td.textContent = row[w];
       if (row[w] > 0 && row[w] === maxVal) td.classList.add('dp-highlight');
@@ -251,7 +457,130 @@ function renderDpTable(data) {
   table.appendChild(body);
 }
 
-/* ── Presets ────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   Enhanced Allocation (in-page)
+   ═══════════════════════════════════════════════════════════ */
+function renderEnhancedAllocation(data) {
+  const table = document.getElementById('enhanced-table');
+  table.innerHTML = '';
+
+  const alloc = data.enhanced_allocation || [];
+  if (!alloc.length) return;
+
+  gsapCounter('enh-cost', data.enhanced_total_cost, fmtRupee);
+  gsapCounter('enh-return', data.enhanced_total_return, fmtRupee);
+  gsapCounter('enh-remaining', data.enhanced_remaining, fmtRupee);
+
+  const head = document.createElement('thead');
+  head.innerHTML = `<tr><th>Investment</th><th>Unit Cost</th><th>Unit Return</th><th>Units</th><th>Total Cost</th><th>Total Return</th></tr>`;
+  table.appendChild(head);
+
+  const body = document.createElement('tbody');
+  alloc.forEach((item, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${item.name}</td>
+      <td>${fmtRupee(item.unit_cost)}</td>
+      <td>${fmtRupee(item.unit_return)}</td>
+      <td><strong>${item.units}</strong></td>
+      <td>${fmtRupee(item.total_cost)}</td>
+      <td>${fmtRupee(item.total_return)}</td>
+    `;
+    body.appendChild(tr);
+    gsap.from(tr, { opacity: 0, x: -20, duration: 0.4, delay: i * 0.05, ease: 'power2.out' });
+  });
+  table.appendChild(body);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Modal — Enhanced Portfolio Popup
+   ═══════════════════════════════════════════════════════════ */
+function openModal(data) {
+  const alloc = data.enhanced_allocation || [];
+  if (!alloc.length) return;
+
+  const overlay = document.getElementById('modal-overlay');
+  const modal = document.getElementById('modal');
+
+  // Populate modal KPIs
+  document.getElementById('modal-cost').textContent = fmtRupee(data.enhanced_total_cost);
+  document.getElementById('modal-return').textContent = fmtRupee(data.enhanced_total_return);
+  document.getElementById('modal-remaining').textContent = fmtRupee(data.enhanced_remaining);
+
+  // Populate modal table
+  const table = document.getElementById('modal-table');
+  table.innerHTML = '';
+  const head = document.createElement('thead');
+  head.innerHTML = `<tr><th>Investment</th><th>Unit Cost</th><th>Units</th><th>Total Cost</th><th>Total Return</th></tr>`;
+  table.appendChild(head);
+
+  const body = document.createElement('tbody');
+  alloc.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${item.name}</td>
+      <td>${fmtRupee(item.unit_cost)}</td>
+      <td><strong style="color:#2a7e4b;font-size:1.3em">${item.units}</strong></td>
+      <td>${fmtRupee(item.total_cost)}</td>
+      <td>${fmtRupee(item.total_return)}</td>
+    `;
+    body.appendChild(tr);
+  });
+  table.appendChild(body);
+
+  // Animate in
+  overlay.classList.add('active');
+  const tl = gsap.timeline();
+  tl.to(overlay, { opacity: 1, duration: 0.4, ease: 'power2.out' })
+    .to(modal, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'power3.out' }, '-=0.2');
+
+  // Stagger KPI cards
+  gsap.from('.modal-kpi', { opacity: 0, y: 20, duration: 0.5, stagger: 0.1, delay: 0.5, ease: 'power2.out' });
+
+  // Stagger table rows
+  gsap.from('#modal-table tbody tr', { opacity: 0, x: -15, duration: 0.4, stagger: 0.06, delay: 0.7, ease: 'power2.out' });
+
+  // Counter animations in modal
+  const costObj = { val: 0 };
+  gsap.to(costObj, {
+    val: data.enhanced_total_cost, duration: 2, delay: 0.5, ease: 'power2.out',
+    onUpdate: () => { document.getElementById('modal-cost').textContent = fmtRupee(costObj.val); }
+  });
+  const retObj = { val: 0 };
+  gsap.to(retObj, {
+    val: data.enhanced_total_return, duration: 2, delay: 0.5, ease: 'power2.out',
+    onUpdate: () => { document.getElementById('modal-return').textContent = fmtRupee(retObj.val); }
+  });
+}
+
+function closeModal() {
+  const overlay = document.getElementById('modal-overlay');
+  const modal = document.getElementById('modal');
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      overlay.classList.remove('active');
+      gsap.set(modal, { opacity: 0, y: 40, scale: 0.95 });
+      gsap.set(overlay, { opacity: 0 });
+    }
+  });
+  tl.to(modal, { opacity: 0, y: -30, scale: 0.95, duration: 0.35, ease: 'power2.in' })
+    .to(overlay, { opacity: 0, duration: 0.3 }, '-=0.15');
+}
+
+// Close modal on overlay click (not modal itself)
+document.getElementById('modal-overlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// Close on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ═══════════════════════════════════════════════════════════
+   Presets
+   ═══════════════════════════════════════════════════════════ */
 async function loadPresets() {
   try {
     const res = await fetch(`${API}/api/v1/presets`);
@@ -265,8 +594,7 @@ async function loadPresets() {
       btn.onclick = () => applyPreset(preset);
       container.appendChild(btn);
     });
-  } catch (_) {
-  }
+  } catch (_) {}
 }
 
 function applyPreset(preset) {
@@ -276,16 +604,222 @@ function applyPreset(preset) {
   preset.investments.forEach(inv => addInvestmentRow(inv));
 }
 
-/* ── Init ───────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   Toast
+   ═══════════════════════════════════════════════════════════ */
+(function createToastContainer() {
+  const c = document.createElement('div');
+  c.className = 'toast-container';
+  c.id = 'toast-container';
+  document.body.appendChild(c);
+})();
+
+function showToast(message, type = 'error') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type === 'success' ? 'toast-success' : ''}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+  gsap.to(toast, { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' });
+  gsap.to(toast, { opacity: 0, x: 20, duration: 0.3, delay: 5, onComplete: () => toast.remove() });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Live Data
+   ═══════════════════════════════════════════════════════════ */
+let categoriesData = {};
+
+async function loadCategories() {
+  try {
+    const res = await fetch(`${API}/api/v1/categories`);
+    if (!res.ok) return;
+    const data = await res.json();
+    categoriesData = data.categories || {};
+    const select = document.getElementById('category-select');
+    Object.keys(categoriesData).forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      select.appendChild(opt);
+    });
+  } catch (_) {}
+}
+
+async function fetchLiveData() {
+  const selectedCategory = document.getElementById('category-select').value;
+  const customTickers = document.getElementById('custom-tickers').value.trim();
+  const btn = document.getElementById('fetch-btn');
+  const label = document.getElementById('fetch-btn-label');
+  const spinner = document.getElementById('fetch-spinner');
+  const statusEl = document.getElementById('fetch-status');
+
+  let url = '', source = '';
+
+  if (customTickers) {
+    url = `${API}/api/v1/fetch-investments?tickers=${encodeURIComponent(customTickers)}`;
+    source = 'Yahoo Finance (custom)';
+  } else if (selectedCategory && categoriesData[selectedCategory]) {
+    const cat = categoriesData[selectedCategory];
+    if (cat.type === 'mf') {
+      url = `${API}/api/v1/fetch-mf?scheme_codes=${encodeURIComponent(cat.scheme_codes.join(','))}`;
+      source = 'MFAPI.in';
+    } else {
+      url = `${API}/api/v1/fetch-investments?tickers=${encodeURIComponent(cat.tickers.join(','))}`;
+      source = 'Yahoo Finance';
+    }
+  } else {
+    showToast('Please select a category or enter custom tickers.');
+    return;
+  }
+
+  label.textContent = 'Fetching...';
+  spinner.style.display = 'inline-block';
+  btn.style.opacity = '0.7';
+  btn.disabled = true;
+  statusEl.textContent = 'Connecting to data source...';
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || `HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    const investments = data.investments || [];
+    if (!investments.length) {
+      showToast('No investment data returned.');
+      statusEl.textContent = 'No data returned.';
+      return;
+    }
+    investments.forEach(inv => addInvestmentRow(inv));
+    statusEl.textContent = `✓ ${investments.length} investments loaded from ${source} at ${new Date().toLocaleTimeString()}`;
+    showToast(`${investments.length} investments loaded.`, 'success');
+  } catch (e) {
+    showToast(`Fetch failed: ${e.message}`);
+    statusEl.textContent = `✗ ${e.message}`;
+  } finally {
+    label.textContent = 'Fetch Live Data';
+    spinner.style.display = 'none';
+    btn.style.opacity = '1';
+    btn.disabled = false;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Background Animation: NexVest DP Matrix Flow
+   ═══════════════════════════════════════════════════════════ */
+function initMatrixFlow() {
+  const canvas = document.getElementById('bg-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  
+  let w, h;
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const cols = 30;
+  const rows = 45;
+  const size = 25;
+  const grid = [];
+
+  for (let c = 0; c < cols; c++) {
+    grid[c] = [];
+    for (let r = 0; r < rows; r++) {
+      grid[c][r] = {
+        val: Math.random() > 0.8 ? 1 : 0,
+        char: Math.random() > 0.5 ? '1' : '0'
+      };
+    }
+  }
+
+  let frame = 0;
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    frame++;
+
+    // 1. Draw organic background waves
+    const waveColors = ['rgba(42, 126, 75, 0.04)', 'rgba(184, 134, 11, 0.03)', 'rgba(42, 126, 75, 0.06)'];
+    waveColors.forEach((color, i) => {
+      ctx.beginPath();
+      ctx.moveTo(0, h);
+      for (let y = h; y >= -50; y -= 20) {
+        const xBase = w * 0.1 + (y / h) * w * 0.15;
+        const xOffset = Math.sin(y * 0.003 + frame * 0.015 + i) * 80;
+        const xOffset2 = Math.cos(y * 0.007 - frame * 0.01 + i) * 40;
+        ctx.lineTo(xBase + xOffset + xOffset2, y);
+      }
+      ctx.lineTo(0, -50);
+      ctx.lineTo(0, h);
+      ctx.fillStyle = color;
+      ctx.fill();
+    });
+
+    // 2. Draw falling 0/1 Matrix grid
+    ctx.font = '12px "DM Mono", monospace';
+    
+    for (let c = 0; c < cols; c++) {
+      for (let r = 0; r < rows; r++) {
+        const cell = grid[c][r];
+        
+        // Randomly glitch/flip characters to simulate active computation
+        if (Math.random() > 0.995) {
+          cell.char = Math.random() > 0.5 ? '1' : '0';
+          cell.val = 1; // spike opacity
+        }
+        
+        // Ease opacity back down
+        cell.val += (0 - cell.val) * 0.03;
+        
+        // Calculate position
+        const x = c * size + (w * 0.02);
+        // Scroll downward like a waterfall
+        const y = ((r * size) + (frame * 0.6)) % (rows * size) - size;
+        
+        // Fade out to the right side of the screen
+        const maxRight = w * 0.35;
+        const xFade = 1 - (x / maxRight);
+        
+        if (xFade > 0) {
+          const finalAlpha = (cell.val * 0.5 + 0.05) * xFade;
+          
+          if (c % 5 === 0) {
+            // Draw geometric blocks on some columns
+            ctx.fillStyle = `rgba(42, 126, 75, ${finalAlpha * 0.5})`;
+            ctx.fillRect(x + 5, y + 5, size - 10, size - 10);
+            ctx.strokeStyle = `rgba(42, 126, 75, ${finalAlpha})`;
+            ctx.strokeRect(x + 5, y + 5, size - 10, size - 10);
+          } else {
+            // Draw binary numbers
+            ctx.fillStyle = `rgba(42, 126, 75, ${finalAlpha})`;
+            ctx.fillText(cell.char, x + 8, y + 16);
+          }
+        }
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+  
+  animate();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Init
+   ═══════════════════════════════════════════════════════════ */
 (function init() {
-  // Seed with default rows
+  initMatrixFlow();
   const defaults = [
-    { name: 'Tech Stocks',  cost: 30, expected_return: 45, risk_level: 'high',   sector: 'Technology' },
-    { name: 'Govt Bonds',   cost: 20, expected_return: 22, risk_level: 'low',    sector: 'Bonds'      },
-    { name: 'Mutual Fund',  cost: 25, expected_return: 30, risk_level: 'medium', sector: 'Equity'     },
-    { name: 'Fixed Deposit',cost: 15, expected_return: 17, risk_level: 'low',    sector: 'Banking'    },
-    { name: 'Real Estate',  cost: 50, expected_return: 70, risk_level: 'medium', sector: 'Property'   },
+    { name: 'Tech Stocks',  cost: 30000, expected_return: 45000, risk_level: 'high',   sector: 'Technology' },
+    { name: 'Govt Bonds',   cost: 20000, expected_return: 22000, risk_level: 'low',    sector: 'Bonds'      },
+    { name: 'Mutual Fund',  cost: 25000, expected_return: 30000, risk_level: 'medium', sector: 'Equity'     },
+    { name: 'Fixed Deposit',cost: 15000, expected_return: 17000, risk_level: 'low',    sector: 'Banking'    },
+    { name: 'Real Estate',  cost: 50000, expected_return: 70000, risk_level: 'medium', sector: 'Property'   },
   ];
   defaults.forEach(d => addInvestmentRow(d));
   loadPresets();
+  loadCategories();
 })();

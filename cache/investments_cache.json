@@ -1,0 +1,156 @@
+{
+  "stock:INFY.NS": {
+    "data": {
+      "name": "INFOSYS LIMITED",
+      "cost": 1179,
+      "expected_return": 1462,
+      "risk_level": "medium",
+      "sector": "Technology",
+      "description": "Live: INFY.NS | Price: ₹1179.20 | Vol: 26.2%"
+    },
+    "timestamp": 1778356894.2389483
+  },
+  "stock:TCS.NS": {
+    "data": {
+      "name": "TATA CONSULTANCY SERV LT",
+      "cost": 2394,
+      "expected_return": 2946,
+      "risk_level": "medium",
+      "sector": "Technology",
+      "description": "Live: TCS.NS | Price: ₹2394.40 | Vol: 22.3%"
+    },
+    "timestamp": 1778356894.6285563
+  },
+  "stock:WIPRO.NS": {
+    "data": {
+      "name": "WIPRO LTD",
+      "cost": 198,
+      "expected_return": 210,
+      "risk_level": "medium",
+      "sector": "Technology",
+      "description": "Live: WIPRO.NS | Price: ₹197.91 | Vol: 23.6%"
+    },
+    "timestamp": 1778356894.975346
+  },
+  "stock:HCLTECH.NS": {
+    "data": {
+      "name": "HCL TECHNOLOGIES LTD",
+      "cost": 1198,
+      "expected_return": 1433,
+      "risk_level": "medium",
+      "sector": "Technology",
+      "description": "Live: HCLTECH.NS | Price: ₹1198.40 | Vol: 25.5%"
+    },
+    "timestamp": 1778356895.3916082
+  },
+  "stock:TECHM.NS": {
+    "data": {
+      "name": "TECH MAHINDRA LIMITED",
+      "cost": 1463,
+      "expected_return": 1583,
+      "risk_level": "medium",
+      "sector": "Technology",
+      "description": "Live: TECHM.NS | Price: ₹1463.00 | Vol: 24.9%"
+    },
+    "timestamp": 1778356895.7179615
+  },
+  "stock:HDFCBANK.NS": {
+    "data": {
+      "name": "HDFC BANK LTD",
+      "cost": 781,
+      "expected_return": 1041,
+      "risk_level": "medium",
+      "sector": "Financial Services",
+      "description": "Live: HDFCBANK.NS | Price: ₹780.85 | Vol: 19.0%"
+    },
+    "timestamp": 1778355790.2768188
+  },
+  "stock:ICICIBANK.NS": {
+    "data": {
+      "name": "ICICI BANK LTD.",
+      "cost": 1265,
+      "expected_return": 1670,
+      "risk_level": "medium",
+      "sector": "Financial Services",
+      "description": "Live: ICICIBANK.NS | Price: ₹1264.80 | Vol: 18.6%"
+    },
+    "timestamp": 1778355790.8217392
+  },
+  "stock:SBIN.NS": {
+    "data": {
+      "name": "STATE BANK OF INDIA",
+      "cost": 1019,
+      "expected_return": 1199,
+      "risk_level": "medium",
+      "sector": "Financial Services",
+      "description": "Live: SBIN.NS | Price: ₹1019.30 | Vol: 21.7%"
+    },
+    "timestamp": 1778355791.4309862
+  },
+  "stock:KOTAKBANK.NS": {
+    "data": {
+      "name": "KOTAK MAHINDRA BANK LTD",
+      "cost": 381,
+      "expected_return": 461,
+      "risk_level": "medium",
+      "sector": "Financial Services",
+      "description": "Live: KOTAKBANK.NS | Price: ₹380.80 | Vol: 21.0%"
+    },
+    "timestamp": 1778355792.1370912
+  },
+  "stock:AXISBANK.NS": {
+    "data": {
+      "name": "AXIS BANK LIMITED",
+      "cost": 1268,
+      "expected_return": 1581,
+      "risk_level": "medium",
+      "sector": "Financial Services",
+      "description": "Live: AXISBANK.NS | Price: ₹1268.30 | Vol: 23.8%"
+    },
+    "timestamp": 1778355792.851989
+  },
+  "mf:100033": {
+    "data": {
+      "name": "Aditya Birla Sun Life Large & Mid Cap Fund - Regular Growth",
+      "cost": 922,
+      "expected_return": 968,
+      "risk_level": "low",
+      "sector": "Equity Scheme - Large & Mid Cap Fund",
+      "description": "Live MF: 100033 | NAV: ₹921.81 | Aditya Birla Sun Life Mutual F"
+    },
+    "timestamp": 1778355801.8133726
+  },
+  "mf:119551": {
+    "data": {
+      "name": "Aditya Birla Sun Life Banking & PSU Debt Fund  - DIRECT - ID",
+      "cost": 105,
+      "expected_return": 110,
+      "risk_level": "low",
+      "sector": "Debt Scheme - Banking and PSU Fund",
+      "description": "Live MF: 119551 | NAV: ₹104.87 | Aditya Birla Sun Life Mutual F"
+    },
+    "timestamp": 1778355803.5422347
+  },
+  "mf:120503": {
+    "data": {
+      "name": "Axis ELSS Tax Saver Fund - Direct Plan - Growth Option",
+      "cost": 107,
+      "expected_return": 112,
+      "risk_level": "low",
+      "sector": "Equity Scheme - ELSS",
+      "description": "Live MF: 120503 | NAV: ₹107.15 | Axis Mutual Fund"
+    },
+    "timestamp": 1778355805.0767508
+  },
+  "mf:118989": {
+    "data": {
+      "name": "HDFC Mid Cap Fund - Growth Option - Direct Plan",
+      "cost": 224,
+      "expected_return": 243,
+      "risk_level": "low",
+      "sector": "Equity Scheme - Mid Cap Fund",
+      "description": "Live MF: 118989 | NAV: ₹223.90 | HDFC Mutual Fund"
+    },
+    "timestamp": 1778355806.6198657
+  }
+}

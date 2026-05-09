@@ -1,27 +1,86 @@
-/* Custom Overrides for Tufte CSS */
+/* ═══════════════════════════════════════════════════════════
+   PortfolioAI — Aristocratic Tufte + GSAP Design System
+   ═══════════════════════════════════════════════════════════ */
 
 :root {
   --font-mono: 'DM Mono', monospace;
   --green: #2a7e4b;
+  --green-light: rgba(42, 126, 75, 0.15);
+  --gold: #b8860b;
   --bg: #fffff8;
+  --bg-alt: #fafaf4;
   --text: #111;
+  --text-muted: #555;
   --border: #ccc;
   --highlight: rgba(42, 126, 75, 0.15);
 }
 
+/* ── Base ─────────────────────────────────────────────────── */
 body {
   background-color: var(--bg);
   color: var(--text);
   overflow-x: hidden;
 }
 
-h1.gsap-hero, p.gsap-hero, .gsap-fade, .gsap-res {
-  /* Initial state for GSAP */
+/* ── Hero ─────────────────────────────────────────────────── */
+.hero-header {
+  text-align: left;
+  padding-bottom: 1rem;
+}
+.hero-title {
+  font-size: 4.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+  overflow: hidden;
+}
+.hero-title .word {
+  display: inline-block;
   opacity: 0;
-  transform: translateY(15px);
+  transform: translateY(100%);
+}
+.hero-title .accent {
+  color: var(--green);
+}
+.hero-line {
+  width: 0;
+  height: 2px;
+  background: var(--text);
+  margin-bottom: 1rem;
+}
+.subtitle {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.char-reveal {
+  display: inline-block;
 }
 
-/* Form Elements */
+/* ── Section Headings ─────────────────────────────────────── */
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+.heading-num {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--green);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+/* ── Animation initial states ─────────────────────────────── */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.text-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* ── Form Elements ────────────────────────────────────────── */
 .tufte-input {
   border: none;
   border-bottom: 1px solid var(--border);
@@ -30,10 +89,10 @@ h1.gsap-hero, p.gsap-hero, .gsap-fade, .gsap-res {
   font-size: 1.4rem;
   padding: 0.2rem 0;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.3s ease;
 }
 .tufte-input:focus {
-  border-bottom: 2px solid var(--text);
+  border-bottom: 2px solid var(--green);
 }
 
 .tufte-table {
@@ -57,7 +116,7 @@ h1.gsap-hero, p.gsap-hero, .gsap-fade, .gsap-res {
   border-bottom: 1px solid #e0e0e0;
 }
 
-/* Button */
+/* ── Buttons ──────────────────────────────────────────────── */
 .btn-primary {
   background: transparent;
   border: 1px solid var(--text);
@@ -66,14 +125,29 @@ h1.gsap-hero, p.gsap-hero, .gsap-fade, .gsap-res {
   font-size: 1.4rem;
   padding: 0.8rem 2rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--text);
+  transition: left 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: -1;
 }
 .btn-primary:hover {
-  background: var(--text);
   color: var(--bg);
+}
+.btn-primary:hover::before {
+  left: 0;
 }
 
 .btn-ghost {
@@ -91,25 +165,34 @@ h1.gsap-hero, p.gsap-hero, .gsap-fade, .gsap-res {
   color: #a00;
   cursor: pointer;
   font-size: 1.4rem;
+  transition: transform 0.2s;
+}
+.btn-del:hover {
+  transform: scale(1.3);
 }
 
-/* Tags & Badges */
+/* ── Tags & KPIs ──────────────────────────────────────────── */
 .tag {
   display: inline-block;
   border: 1px solid var(--text);
-  padding: 0 0.5rem;
+  padding: 0.15rem 0.6rem;
   margin-right: 0.5rem;
+  margin-bottom: 0.3rem;
   font-family: var(--font-mono);
   font-size: 1.2rem;
   background: #f0f0ea;
+  transition: all 0.3s;
 }
-
+.tag:hover {
+  background: var(--text);
+  color: var(--bg);
+}
 .kpi-val {
   font-family: var(--font-mono);
   font-weight: normal;
 }
 
-/* Presets */
+/* ── Presets ───────────────────────────────────────────────── */
 .presets-bar {
   margin-top: 1rem;
   margin-bottom: 2rem;
@@ -126,12 +209,14 @@ h1.gsap-hero, p.gsap-hero, .gsap-fade, .gsap-res {
   cursor: pointer;
   text-decoration: underline;
   color: #444;
+  transition: color 0.2s, letter-spacing 0.3s;
 }
 .preset-btn:hover {
-  color: #000;
+  color: var(--green);
+  letter-spacing: 0.05em;
 }
 
-/* DP Table */
+/* ── DP Table ─────────────────────────────────────────────── */
 .table-wrapper {
   width: 100%;
 }
@@ -159,4 +244,356 @@ h1.gsap-hero, p.gsap-hero, .gsap-fade, .gsap-res {
   background: var(--highlight);
   font-weight: bold;
   color: var(--green);
+}
+
+/* ── Enhanced Table ───────────────────────────────────────── */
+.enhanced-table td strong {
+  color: var(--green);
+  font-size: 1.3em;
+}
+
+/* ── Live Data Panel ──────────────────────────────────────── */
+.live-data-panel {
+  border: 1px solid #ddd;
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
+  background: var(--bg-alt);
+}
+.live-data-panel h3 {
+  margin-top: 0;
+  font-size: 1.6rem;
+}
+.live-data-desc {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+.live-data-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+.live-data-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.live-data-row label {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #444;
+}
+.tufte-select {
+  font-size: 1.2rem;
+  padding: 0.3rem 0;
+  min-width: 200px;
+  cursor: pointer;
+}
+.btn-fetch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  padding: 0.6rem 1.5rem;
+  margin-top: 0;
+}
+
+/* ── Spinner ──────────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--text);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Fetch Status ─────────────────────────────────────────── */
+.fetch-status {
+  font-size: 1.1rem;
+  font-family: var(--font-mono);
+  color: #666;
+  font-style: italic;
+  margin-top: 0.8rem;
+  min-height: 1.4em;
+}
+
+/* ── Toast ─────────────────────────────────────────────────── */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.toast {
+  background: #333;
+  color: #fff;
+  padding: 0.8rem 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  border-left: 4px solid #a00;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateX(20px);
+}
+.toast.toast-success {
+  border-left-color: var(--green);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Modal — Enhanced Portfolio Popup
+   ═══════════════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 5000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+}
+.modal-overlay.active {
+  display: flex;
+}
+.modal {
+  background: var(--bg);
+  border: 1px solid #ddd;
+  max-width: 750px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 3rem;
+  position: relative;
+  transform: translateY(40px) scale(0.95);
+  opacity: 0;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--text);
+  padding-bottom: 1rem;
+}
+.modal-header h2 {
+  font-size: 2.2rem;
+  margin: 0;
+}
+.modal-close {
+  background: transparent;
+  border: 1px solid var(--text);
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+.modal-close:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+.modal-kpis {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.modal-kpi {
+  flex: 1;
+  min-width: 150px;
+  border: 1px solid #eee;
+  padding: 1.2rem;
+  text-align: center;
+}
+.modal-kpi-label {
+  display: block;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+.modal-kpi-val {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1.8rem;
+}
+.modal-kpi-green {
+  color: var(--green);
+}
+.modal-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+.modal-table-wrap table {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+}
+.modal-hint {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero-title { font-size: 3rem; }
+  .modal { padding: 2rem; }
+  .modal-kpis { gap: 1rem; }
+  .marquee-strip { padding: 1rem 0; }
+  .marquee-track span { font-size: 1.2rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Marquee Ticker Strip
+   ═══════════════════════════════════════════════════════════ */
+.marquee-strip {
+  overflow: hidden;
+  background: var(--text);
+  color: var(--bg);
+  padding: 1.4rem 5%;
+  margin: 3rem -5% 0 -5%;
+  white-space: nowrap;
+  position: relative;
+}
+.marquee-track {
+  display: inline-flex;
+  gap: 2rem;
+  animation: marquee-scroll 20s linear infinite;
+  will-change: transform;
+}
+.marquee-track span {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  letter-spacing: 0.15em;
+  font-weight: 300;
+}
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Results Section — Dark Theme Shift
+   ═══════════════════════════════════════════════════════════ */
+.results-section {
+  background: #0d0d0d;
+  color: #e8e8e2;
+  padding: 3rem 5%;
+  margin: 0 -5%;
+  transition: background 0.6s ease;
+}
+.results-section p,
+.results-section em,
+.results-section strong:not(.kpi-val) {
+  color: #d4d4cc;
+}
+.results-section .section-heading {
+  color: #e8e8e2;
+}
+.results-section .heading-num {
+  color: var(--green);
+}
+.results-section .kpi-val {
+  color: var(--green);
+}
+.results-section .tag {
+  border-color: #555;
+  background: #1a1a1a;
+  color: #e8e8e2;
+}
+.results-section .tag:hover {
+  background: var(--green);
+  color: #0d0d0d;
+  border-color: var(--green);
+}
+.results-section .dp-table-scroll {
+  background: #111;
+  border-color: #333;
+}
+.results-section .dp-table th {
+  background: #1a1a1a;
+  color: #aaa;
+  border-right-color: #333;
+  border-bottom-color: #555;
+}
+.results-section .dp-table td {
+  border-right-color: #222;
+  color: #999;
+}
+.results-section .dp-table tr {
+  border-bottom-color: #222;
+}
+.results-section .dp-table td.dp-highlight {
+  background: rgba(42, 126, 75, 0.25);
+  color: var(--green);
+}
+.results-section .enhanced-table th {
+  background: #1a1a1a;
+  color: #aaa;
+  border-right-color: #333;
+  border-bottom-color: #555;
+}
+.results-section .enhanced-table td {
+  color: #ccc;
+  border-right-color: #222;
+}
+.results-section .enhanced-table tr {
+  border-bottom-color: #222;
+}
+.results-section figcaption {
+  color: #777;
+}
+.results-section .tufte-table th {
+  border-bottom-color: #555;
+}
+.results-section .tufte-table tr {
+  border-bottom-color: #222;
+}
+.results-section .sidenote,
+.results-section .marginnote {
+  color: #999;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Clip-path Reveal (for chart figures)
+   ═══════════════════════════════════════════════════════════ */
+.clip-reveal {
+  clip-path: inset(0 100% 0 0);
+  will-change: clip-path;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Parallax Scale — Charts zoom in
+   ═══════════════════════════════════════════════════════════ */
+.scale-reveal {
+  transform: scale(0.85);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Table Row Stagger Animation State
+   ═══════════════════════════════════════════════════════════ */
+.row-stagger {
+  opacity: 0;
+  transform: translateX(-20px);
+  will-change: transform, opacity;
 }

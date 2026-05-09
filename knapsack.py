@@ -2,7 +2,7 @@
 Optimal Investment Portfolio Planner — Core DP Engine
 Uses 0/1 Knapsack via Dynamic Programming.
 
-Scalability notes:
+Future scalability hooks:
 - add_constraint() hooks allow future risk-cap, sector-limit extensions
 - solve() returns a rich result dict — extend without breaking the API contract
 """
