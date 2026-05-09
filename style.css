@@ -1,0 +1,162 @@
+/* Custom Overrides for Tufte CSS */
+
+:root {
+  --font-mono: 'DM Mono', monospace;
+  --green: #2a7e4b;
+  --bg: #fffff8;
+  --text: #111;
+  --border: #ccc;
+  --highlight: rgba(42, 126, 75, 0.15);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+h1.gsap-hero, p.gsap-hero, .gsap-fade, .gsap-res {
+  /* Initial state for GSAP */
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+/* Form Elements */
+.tufte-input {
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  padding: 0.2rem 0;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.tufte-input:focus {
+  border-bottom: 2px solid var(--text);
+}
+
+.tufte-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.tufte-table th, .tufte-table td {
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+.tufte-table th {
+  border-bottom: 2px solid var(--text);
+  font-weight: normal;
+  font-style: italic;
+}
+.tufte-table tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Button */
+.btn-primary {
+  background: transparent;
+  border: 1px solid var(--text);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1.4rem;
+  padding: 0.8rem 2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 1rem;
+}
+.btn-primary:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-style: italic;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.btn-del {
+  background: transparent;
+  border: none;
+  color: #a00;
+  cursor: pointer;
+  font-size: 1.4rem;
+}
+
+/* Tags & Badges */
+.tag {
+  display: inline-block;
+  border: 1px solid var(--text);
+  padding: 0 0.5rem;
+  margin-right: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  background: #f0f0ea;
+}
+
+.kpi-val {
+  font-family: var(--font-mono);
+  font-weight: normal;
+}
+
+/* Presets */
+.presets-bar {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.preset-btns {
+  display: inline-flex;
+  gap: 1rem;
+}
+.preset-btn {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-decoration: underline;
+  color: #444;
+}
+.preset-btn:hover {
+  color: #000;
+}
+
+/* DP Table */
+.table-wrapper {
+  width: 100%;
+}
+.dp-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  background: #fff;
+  margin-bottom: 1rem;
+}
+.dp-table {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  min-width: 100%;
+}
+.dp-table th {
+  background: #f9f9f9;
+  border-right: 1px solid #eee;
+  white-space: nowrap;
+}
+.dp-table td {
+  border-right: 1px solid #eee;
+  text-align: center;
+}
+.dp-table td.dp-highlight {
+  background: var(--highlight);
+  font-weight: bold;
+  color: var(--green);
+}

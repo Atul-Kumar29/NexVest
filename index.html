@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PortfolioAI — Optimal Investment Planner</title>
+  
+  <!-- Tufte CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tufte-css/1.8.0/tufte.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- GSAP ScrollToPlugin -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+  
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<article>
+  <header>
+    <h1 class="gsap-hero">PortfolioAI</h1>
+    <p class="subtitle gsap-hero">Knapsack Dynamic Programming Engine</p>
+  </header>
+
+  <section>
+    <p class="gsap-fade">
+      Maximize your returns. Input your budget and investment options. Our 0/1 Knapsack algorithm finds the optimal portfolio mathematically.
+      <label for="sn-knapsack" class="margin-toggle sidenote-number"></label>
+      <input type="checkbox" id="sn-knapsack" class="margin-toggle"/>
+      <span class="sidenote">
+        <strong>0/1 Knapsack DP:</strong> Each investment is either fully selected or skipped. The DP table builds the optimal answer bottom-up in <em>O(n×W)</em> time, guaranteeing maximum return within the budget constraint.
+      </span>
+    </p>
+
+    <!-- Presets bar -->
+    <div class="presets-bar gsap-fade">
+      <span class="presets-label">Presets: </span>
+      <span id="preset-btns" class="preset-btns"></span>
+    </div>
+
+    <!-- Inputs -->
+    <h2 class="gsap-fade">1. Configuration</h2>
+    <div class="input-container gsap-fade">
+      <p>
+        <label for="budget">Total Budget (₹ thousands): </label>
+        <input type="number" id="budget" class="tufte-input" value="100" min="1" style="width: 100px;"/>
+      </p>
+
+      <p>
+        <label for="sn-backtrack" class="margin-toggle">&#8853;</label>
+        <input type="checkbox" id="sn-backtrack" class="margin-toggle"/>
+        <span class="marginnote">
+          <strong>Backtracking:</strong> After computing the max return, we trace backwards from <code>dp[n][W]</code> to identify the exact combination of chosen investments.
+        </span>
+      </p>
+
+      <table class="tufte-table inv-table">
+        <thead>
+          <tr>
+            <th>Investment Name</th>
+            <th>Cost (k)</th>
+            <th>Return (k)</th>
+            <th>Risk</th>
+            <th>Sector</th>
+            <th><button class="btn-ghost" onclick="addInvestmentRow()">+ Add</button></th>
+          </tr>
+        </thead>
+        <tbody id="inv-tbody"></tbody>
+      </table>
+
+      <p>
+        <button class="btn-primary" id="solve-btn" onclick="solve()">Compute Optimal Portfolio</button>
+      </p>
+    </div>
+  </section>
+
+  <!-- Results Section -->
+  <section id="results-panel" style="display:none">
+    <h2 class="gsap-res">2. Results</h2>
+    
+    <p class="gsap-res">
+      The optimal selection yields a return of <strong id="kpi-return" class="kpi-val">—</strong> from an investment of <strong id="kpi-invested" class="kpi-val">—</strong> (ROI: <span id="kpi-roi" class="kpi-val">—</span>). The remaining budget is <span id="kpi-remaining" class="kpi-val">—</span>.
+    </p>
+
+    <p class="gsap-res">
+      <strong>Selected Investments: </strong>
+      <span id="selected-tags"></span>
+    </p>
+
+    <figure class="gsap-res">
+      <div style="display:flex; justify-content:space-between; gap:2rem; flex-wrap:wrap;">
+        <div style="flex:1; min-width:300px;">
+          <canvas id="bar-chart"></canvas>
+        </div>
+        <div style="flex:1; max-width:300px; margin:auto;">
+          <canvas id="doughnut-chart"></canvas>
+        </div>
+      </div>
+      <figcaption>Return vs Cost analysis (left) and Selected Allocation (right).</figcaption>
+    </figure>
+
+    <h3 class="gsap-res">Dynamic Programming Tracing</h3>
+    <p class="gsap-res">
+      The table below shows the bottom-up construction of the solution. Rows represent investments considered up to that point, and columns represent incremental budget capacities up to the maximum budget <em>W</em>.
+    </p>
+    
+    <figure class="fullwidth gsap-res table-wrapper">
+      <div class="dp-table-scroll">
+        <table class="tufte-table dp-table" id="dp-table"></table>
+      </div>
+      <figcaption>Full DP Matrix trace. Green highlights indicate the optimal path choices yielding the maximum return.</figcaption>
+    </figure>
+
+  </section>
+</article>
+
+<script src="script.js"></script>
+</body>
+</html>
