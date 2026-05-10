@@ -48,11 +48,11 @@ gsap.utils.toArray('.section-reveal').forEach((el) => {
   gsap.to(el, {
     opacity: 1,
     y: 0,
-    duration: 0.9,
+    duration: 0.7,
     ease: 'power3.out',
     scrollTrigger: {
       trigger: el,
-      start: 'top 88%',
+      start: 'top 95%',
       toggleActions: 'play none none none',
     },
   });
@@ -67,9 +67,9 @@ gsap.utils.toArray('.heading-num').forEach(num => {
     opacity: 0,
     scrollTrigger: {
       trigger: num,
-      start: 'top 85%',
-      end: 'top 60%',
-      scrub: 1,
+      start: 'top 95%',
+      end: 'top 75%',
+      scrub: 0.5,
     },
   });
 });
