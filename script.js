@@ -721,8 +721,8 @@ function initMatrixFlow() {
   window.addEventListener('resize', resize);
   resize();
 
-  const cols = 30;
-  const rows = 45;
+  const cols = Math.floor(window.innerWidth / 25) + 2;
+  const rows = Math.floor(window.innerHeight / 25) + 2;
   const size = 25;
   const grid = [];
 
@@ -734,6 +734,19 @@ function initMatrixFlow() {
         char: Math.random() > 0.5 ? '1' : '0'
       };
     }
+  }
+
+  // Floating nodes for data network
+  const nodes = [];
+  const numNodes = window.innerWidth < 768 ? 20 : 60;
+  for (let i = 0; i < numNodes; i++) {
+    nodes.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: (Math.random() - 0.5) * 0.6,
+      r: Math.random() * 2 + 1
+    });
   }
 
   let frame = 0;
@@ -765,38 +778,81 @@ function initMatrixFlow() {
       for (let r = 0; r < rows; r++) {
         const cell = grid[c][r];
         
-        // Randomly glitch/flip characters to simulate active computation
         if (Math.random() > 0.995) {
           cell.char = Math.random() > 0.5 ? '1' : '0';
-          cell.val = 1; // spike opacity
+          cell.val = 1; 
         }
         
-        // Ease opacity back down
         cell.val += (0 - cell.val) * 0.03;
         
-        // Calculate position
-        const x = c * size + (w * 0.02);
-        // Scroll downward like a waterfall
+        const x = c * size;
         const y = ((r * size) + (frame * 0.6)) % (rows * size) - size;
         
-        // Fade out to the right side of the screen
-        const maxRight = w * 0.35;
-        const xFade = 1 - (x / maxRight);
+        // Calculate fade based on distance from center (fade out in the middle where content is)
+        let xFade = 1;
+        if (w >= 768) {
+          const centerDist = Math.abs((x / w) - 0.5) * 2; 
+          xFade = (centerDist - 0.4) * 2.5; // Show only on edges (left/right margins)
+          if (xFade < 0) xFade = 0;
+          if (xFade > 1) xFade = 1;
+        } else {
+          xFade = 0.4; // Subtle everywhere on mobile
+        }
         
         if (xFade > 0) {
           const finalAlpha = (cell.val * 0.5 + 0.05) * xFade;
           
           if (c % 5 === 0) {
-            // Draw geometric blocks on some columns
             ctx.fillStyle = `rgba(42, 126, 75, ${finalAlpha * 0.5})`;
             ctx.fillRect(x + 5, y + 5, size - 10, size - 10);
             ctx.strokeStyle = `rgba(42, 126, 75, ${finalAlpha})`;
             ctx.strokeRect(x + 5, y + 5, size - 10, size - 10);
           } else {
-            // Draw binary numbers
             ctx.fillStyle = `rgba(42, 126, 75, ${finalAlpha})`;
             ctx.fillText(cell.char, x + 8, y + 16);
           }
+        }
+      }
+    }
+
+    // 3. Draw data constellation network (animates empty space)
+    ctx.lineWidth = 0.8;
+    for (let i = 0; i < nodes.length; i++) {
+      const n1 = nodes[i];
+      n1.x += n1.vx;
+      n1.y += n1.vy;
+      
+      // Bounce off edges smoothly
+      if (n1.x < 0 || n1.x > w) n1.vx *= -1;
+      if (n1.y < 0 || n1.y > h) n1.vy *= -1;
+
+      // Keep out of center if on desktop
+      let alphaMultiplier = 1;
+      if (w >= 768) {
+        const centerDist = Math.abs((n1.x / w) - 0.5) * 2;
+        alphaMultiplier = (centerDist - 0.3) * 2;
+        if (alphaMultiplier < 0.1) alphaMultiplier = 0.1;
+        if (alphaMultiplier > 1) alphaMultiplier = 1;
+      } else {
+        alphaMultiplier = 0.4; // Mobile opacity
+      }
+
+      ctx.beginPath();
+      ctx.arc(n1.x, n1.y, n1.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(42, 126, 75, ${0.6 * alphaMultiplier})`;
+      ctx.fill();
+
+      for (let j = i + 1; j < nodes.length; j++) {
+        const n2 = nodes[j];
+        const dist = Math.hypot(n1.x - n2.x, n1.y - n2.y);
+        const connectDist = w < 768 ? 80 : 120;
+        
+        if (dist < connectDist) {
+          ctx.beginPath();
+          ctx.moveTo(n1.x, n1.y);
+          ctx.lineTo(n2.x, n2.y);
+          ctx.strokeStyle = `rgba(42, 126, 75, ${0.25 * (1 - dist / connectDist) * alphaMultiplier})`;
+          ctx.stroke();
         }
       }
     }
