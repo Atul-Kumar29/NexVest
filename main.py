@@ -178,7 +178,14 @@ def sample_dp_table(dp_table, max_cols=150):
 
 @app.get("/", include_in_schema=False)
 def serve_frontend():
-    return FileResponse(os.path.join(frontend_path, "index.html"))
+    return FileResponse(
+        os.path.join(frontend_path, "index.html"),
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        }
+    )
 
 
 @app.get("/api/v1/health")

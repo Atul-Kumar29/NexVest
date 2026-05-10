@@ -192,6 +192,25 @@ body {
   font-weight: normal;
 }
 
+/* ── Inline Info Boxes (Sidenote overrides) ─────────────── */
+.sidenote, .marginnote {
+  float: none !important;
+  clear: both !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0.8rem 0 !important;
+  padding: 0.6rem 0.8rem !important;
+  font-size: 1.1rem !important;
+  background: var(--bg-alt);
+  border-left: 3px solid var(--green);
+  box-sizing: border-box;
+}
+.margin-toggle:checked + .sidenote,
+.margin-toggle:checked + .marginnote {
+  display: block !important;
+}
+
 /* ── Presets ───────────────────────────────────────────────── */
 .presets-bar {
   margin-top: 1rem;
@@ -492,23 +511,7 @@ body {
     font-size: 2.6rem;
   }
 
-  /* --- Tufte sidenotes / marginnotes: collapse inline --- */
-  .sidenote, .marginnote {
-    float: none !important;
-    clear: both !important;
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0.8rem 0 !important;
-    padding: 0.6rem 0.8rem !important;
-    font-size: 1.1rem !important;
-    background: var(--bg-alt);
-    border-left: 3px solid var(--green);
-  }
-  .margin-toggle:checked + .sidenote,
-  .margin-toggle:checked + .marginnote {
-    display: block !important;
-  }
+  /* Sidenote global styling moved outside media query */
 
   /* --- Investment Table: horizontal scroll --- */
   .inv-table {
