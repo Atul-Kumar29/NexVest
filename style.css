@@ -278,6 +278,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  flex: 1; /* Stretch to fill empty space */
+  min-width: 200px;
+}
+.live-data-row.fetch-btn-row {
+  flex: 0 0 auto; /* Prevent button row from stretching massively */
 }
 .live-data-row label {
   font-size: 1.1rem;
@@ -476,6 +481,10 @@ body {
     width: 100% !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+  }
+  p, figure, h1, h2, h3, h4, table {
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   /* --- Hero --- */
@@ -738,7 +747,8 @@ body {
    Results Section — Dark Theme Shift
    ═══════════════════════════════════════════════════════════ */
 .results-section {
-  background: #0d0d0d;
+  background: rgba(13, 13, 13, 0.85); /* Semi-transparent to let background animations shine through */
+  backdrop-filter: blur(4px); /* Premium glassmorphism */
   color: #e8e8e2;
   padding: 3rem 5%;
   margin: 0 -5%;

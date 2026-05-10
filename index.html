@@ -17,7 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
 
-  <link rel="stylesheet" href="/static/style.css?v=7" />
+  <link rel="stylesheet" href="/static/style.css?v=8" />
 </head>
 
 <body>
@@ -84,12 +84,11 @@
                 <option value="">— Select a category —</option>
               </select>
             </div>
-            <div class="live-data-row">
+            <div class="live-data-row" style="flex: 2;">
               <label for="custom-tickers">Custom tickers:</label>
-              <input type="text" id="custom-tickers" class="tufte-input" placeholder="e.g. RELIANCE.NS, TCS.NS"
-                style="width:260px;" />
+              <input type="text" id="custom-tickers" class="tufte-input" placeholder="e.g. RELIANCE.NS, TCS.NS" />
             </div>
-            <div class="live-data-row">
+            <div class="live-data-row fetch-btn-row">
               <button class="btn-primary btn-fetch magnetic" id="fetch-btn" onclick="fetchLiveData()">
                 <span id="fetch-btn-label">Fetch Live Data</span>
                 <span class="spinner" id="fetch-spinner" style="display:none;"></span>
@@ -235,7 +234,7 @@
     </div>
   </div>
 
-  <script src="/static/script.js?v=7"></script>
+  <script src="/static/script.js?v=8"></script>
 </body>
 
 </html>
