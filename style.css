@@ -540,23 +540,33 @@ body {
   .results-section p,
   .results-section figure,
   .results-section h3 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.8rem;
   }
   .results-section p {
-    line-height: 1.9;
-    font-size: 1.2rem;
+    line-height: 2.2;
+    font-size: 1.15rem;
+  }
+  .results-section figcaption {
+    font-size: 1rem;
+    line-height: 1.5;
   }
   .section-heading {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     line-height: 1.4;
     margin-top: 2.5rem;
-    gap: 0.6rem;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+  }
+  .heading-num {
+    flex-shrink: 0;
   }
 
   /* --- KPI values inline in paragraphs --- */
   .kpi-val {
-    font-size: 1.1rem !important;
+    font-size: 1rem !important;
+    line-height: 2.2;
     word-break: break-all;
+    display: inline;
   }
 
   /* --- Charts: stack vertically --- */
@@ -574,10 +584,22 @@ body {
     height: auto !important;
   }
 
-  /* --- DP Table scroll --- */
+  /* --- DP Table + Enhanced Table scroll --- */
   .dp-table-scroll {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+  }
+  .dp-table,
+  .enhanced-table {
+    white-space: nowrap;
+    min-width: 500px;
+    font-size: 1.1rem;
+  }
+  .dp-table th,
+  .dp-table td,
+  .enhanced-table th,
+  .enhanced-table td {
+    padding: 0.4rem 0.6rem;
   }
 
   /* --- Tags --- */
@@ -611,7 +633,7 @@ body {
     padding-bottom: 0.8rem;
   }
   .modal-header h2 {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     line-height: 1.3;
     flex: 1;
     margin: 0;
@@ -639,7 +661,7 @@ body {
     margin-bottom: 0;
   }
   .modal-kpi-val {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
   .modal-table-wrap {
     overflow-x: auto;
@@ -648,6 +670,7 @@ body {
   .modal-table-wrap table {
     font-size: 1.1rem;
     white-space: nowrap;
+    min-width: 400px;
   }
   .modal-hint {
     font-size: 1rem;
