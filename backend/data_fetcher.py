@@ -24,7 +24,11 @@ logger = logging.getLogger(__name__)
 
 # ── Cache config ──────────────────────────────────────────────────────────────
 
-CACHE_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "cache")
+if os.environ.get("VERCEL"):
+    CACHE_DIR = "/tmp/cache"
+else:
+    CACHE_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "cache")
+
 CACHE_FILE = os.path.join(CACHE_DIR, "investments_cache.json")
 CACHE_TTL = 3600  # 1 hour in seconds
 
@@ -42,9 +46,12 @@ def _read_cache() -> dict:
 
 def _write_cache(cache: dict) -> None:
     """Write the full cache dict to disk."""
-    os.makedirs(CACHE_DIR, exist_ok=True)
-    with open(CACHE_FILE, "w", encoding="utf-8") as f:
-        json.dump(cache, f, indent=2, ensure_ascii=False)
+    try:
+        os.makedirs(CACHE_DIR, exist_ok=True)
+        with open(CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(cache, f, indent=2, ensure_ascii=False)
+    except OSError as e:
+        logger.warning(f"Failed to write cache: {e}")
 
 
 def _cache_get(key: str) -> Optional[dict]:
